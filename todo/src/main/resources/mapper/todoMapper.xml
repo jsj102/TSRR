@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="todo">
+
+	 <insert id="insert" parameterType="todoDTO" useGeneratedKeys="true" keyProperty="SEQ">
+	 		insert into todo_list values (#{seq},#{todo},#{state},#{owner},#{comment})
+	 </insert>
+	 
+	 <select id="readListByOwner" parameterType="int" resultType="todoDTO">
+	 		select SEQ,TODO,STATE,OWNER,COMMENT from todo_list where OWNER = #{owner}
+	 </select>
+	 <update id="update" parameterType="todoDTO">
+	 		update todo_list set TODO=#{todo}, STATE=#{state}, COMMENT=#{comment} where SEQ = #{seq}
+	 </update>
+	 <delete id="delete" parameterType="int">
+	 		delete from todo_list where SEQ=#{seq}
+	 </delete>
+	 
+</mapper>
