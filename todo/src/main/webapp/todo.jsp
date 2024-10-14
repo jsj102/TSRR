@@ -26,12 +26,16 @@
 
 </head>
 <body>
-
+	<a href="http://localhost:8080/todo/schedule.jsp">
+		<button type="button" >Schedule</button>
+	</a>
+	<button id="recordStart" type="button">녹음</button>
 	<form>
 		<div>
 			<input id="todo" placeholder="무엇을 해야하나요?" class="todoinput" value="">
 			진행상태 : <select name="state" id="state">
 				<option value="끝이없음">끝이없음</option>
+				<option value="예정">예정</option>
 				<option value="진행중">진행중</option>
 				<option value="완료">완료</option>
 				<option value="만료">만료</option>
@@ -49,9 +53,11 @@
 	<form id="todoEditForm" style="display: none;">
 		수정 / 
 			
-			할일 : <input type="hidden" id="editSeq" /> <input type="text" id="editTodo" /> 
-			상태 : <select name="editState" id="editState">
+			<input type="hidden" id="editSeq" /> 
+			할일 : <input type="text" id="editTodo" /> 
+			진행상태 : <select name="editState" id="editState">
 				<option value="끝이없음">끝이없음</option>
+				<option value="예정">예정</option>
 				<option value="진행중">진행중</option>
 				<option value="완료">완료</option>
 				<option value="만료">만료</option>
@@ -64,6 +70,51 @@
 
 
 <script type="text/javascript">
+	
+	SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+	//브라우저 호환성문제 해결
+	let stt;
+	if ('SpeechRecognition' in window) {
+		//브라우저 지원문제 확인
+		stt = new SpeechRecognition();
+        stt.lang = 'ko-KR';
+        stt.interimResults = false;
+        stt.maxAlternatives = 1;
+        //위 2개 옵션 default
+        stt.continuous = false;
+        //문장마다 인식종료(한호흡)
+        $('#recordStart').click(function(){
+			stt.start();
+		})
+		stt.onspeechend = function(){
+        	stt.stop();
+        }
+        stt.onresult = function(event){
+        	$('#todo').val(event.results[0][0].transcript);
+        }
+	}
+	
+	
+	/*
+	공통
+	SpeechRecognition.start();
+	SpeechRecognition.stop();
+	SpeechRecognition.abort();
+	SpeechRecognition.onstart
+	SpeechRecognition.onend
+	SpeechRecognition.onresult
+	SpeechRecognition.onerror
+	SpeechRecognition.onspeechstart
+	SpeechRecognition.onspeechend
+	
+	webkitSpeechRecognitio에서
+	SpeechRecognition.onsoundstart
+	SpeechRecognition.onsoundend
+	SpeechRecognition.onaudiostart
+	SpeechRecognition.onaudioend
+	*/
+	
+	
 	let owner = 0;
 	$(document).ready(function() {
 		let seq = -1;
@@ -138,18 +189,17 @@
 		needWorkListForm.empty();
 		doWorkListForm.empty();
 		expiredWorkListForm.empty();
-		
 		needWorkListForm.append("<br><br>할일 - 상태 - 메모<br><br>")
 		doWorkListForm.append("<br><br>한일 - 상태 - 메모<br><br>");
 		expiredWorkListForm.append("<br><br>만료 - 상태 -메모<br><br>");
 		for (let i = 0; i < list.length; i++) {
 		    let todo = list[i]; // 배열의 각 항목을 가져옴
-		    let todoSeq = ${'todo.seq'};
-		    let todoTodo = ${'todo.todo'};
-		    let todoState = ${'todo.state'};
-		    let todoComment = ${'todo.comment'};
+		    let todoSeq = todo.seq;
+		    let todoTodo = todo.todo;
+		    let todoState = todo.state;
+		    let todoComment = todo.comment;
 		    let tempString = '<div class="todo-list" data-seq="'+todoSeq+'"><span class="todo-todo">'+todoTodo+'</span>-<span class="todo-state">'+todoState+'</span>'+" - "+'<span class="todo-comment">'+todoComment+'</span></div>';
-		    if(todoState=="끝이없음"||todoState=="진행중"){		
+		    if(todoState=="끝이없음"||todoState=="진행중"||todoState=="예정"){		
 		    	needWorkListForm.append(tempString);
 		    }
 		    if(todoState=="완료"){

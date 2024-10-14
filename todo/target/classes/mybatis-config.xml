@@ -11,10 +11,12 @@
 		<!--가계부 mybatis -->
 		<typeAlias type="com.blue.todo.MemberDTO" alias="memberDTO"></typeAlias>
 		<typeAlias type="com.blue.todo.TodoDTO" alias="todoDTO"></typeAlias>
+		<typeAlias type="com.blue.schedule.ScheduleDTO" alias="scheduleDTO"></typeAlias>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mapper/memberMapper.xml" />
 		<mapper resource="mapper/todoMapper.xml" />
+		<mapper resource="mapper/scheduleMapper.xml" />
 
 	</mappers>
 	<!-- 여기에 mapUnderscoreToCamelCase 설정 추가 -->

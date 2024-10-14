@@ -20,7 +20,7 @@ public class MemberController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String mainPage() {
-		// http://localhost:8080/todo/
+		// http://주소/todo/
 		// 첫페이지 띄워주기
 		return "main";
 	}
@@ -29,7 +29,6 @@ public class MemberController {
 	public ResponseEntity<String> tryLogin(@RequestParam("id") String id, @RequestParam("pw") String pw,
 			HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		// 아이디 비교하고 결과 controller리턴하고 ->클라이언트에 성공/실패 해주고 그 클라이언트 브라우저가 로그인정보들고있게하기
 		MemberDTO memberDTO = memberService.login(id, pw);
 		if (memberDTO.getSeq() != 0) {
 			// 로그인성공
