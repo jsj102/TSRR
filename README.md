@@ -2,9 +2,8 @@
 
 
 TODO
--입력 : input, 음성녹음(SpeechRecognition)
--수정,삭제 : form
-
+ -입력 : input, 음성녹음(SpeechRecognition)
+ -수정,삭제 : form
 
 CALENDAR
 - fullcalendar api
